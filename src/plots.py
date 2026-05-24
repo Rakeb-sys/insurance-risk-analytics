@@ -97,7 +97,6 @@ def plot_log_summarization(df):
     plt.tight_layout()
     plt.show()
 
-
 def plot_province_vType_claimRate(df):
     # Province and Vehicle Type Analysis
     fig, axes = plt.subplots(1, 2, figsize=(16, 6))
@@ -111,6 +110,32 @@ def plot_province_vType_claimRate(df):
     axes[0].set_title('Claim Rate (%) by Province', fontsize=14, fontweight='bold', color=PALETTE['primary'])
     axes[0].set_xlabel('Claim Rate (%)', fontsize=12)
     axes[0].set_ylabel('Province', fontsize=12)
+
+    # Claim Rate by Vehicle Type
+    veh_claims = df.groupby('VehicleType')['TotalClaims'].mean().reset_index()
+    veh_claims['TotalClaims'] *= 100  # Convert to %
+    veh_claims = veh_claims.sort_values(by='TotalClaims', ascending=False)
+
+    sns.barplot(x='TotalClaims', y='VehicleType', data=veh_claims, palette="Oranges_r", ax=axes[1])
+    axes[1].set_title('Claim Rate (%) by Vehicle Type', fontsize=14, fontweight='bold', color=PALETTE['primary'])
+    axes[1].set_xlabel('Claim Rate (%)', fontsize=12)
+    axes[1].set_ylabel('Vehicle Type', fontsize=12)
+
+    plt.tight_layout()
+    plt.show()
+
+def plot_vType_AvePremium_claimRate(df):
+    # Province and Vehicle Type Analysis
+    fig, axes = plt.subplots(1, 2, figsize=(16, 6))
+
+    # Claim Rate by Province
+    vtype_premiums = df.groupby('VehicleType')['TotalPremium'].mean().reset_index()
+    vtype_premiums = vtype_premiums.sort_values(by='TotalPremium', ascending=False)
+
+    sns.barplot(x='TotalPremium', y='VehicleType', data=vtype_premiums, palette="Blues_r", ax=axes[0])
+    axes[0].set_title('Average Premium by Vehicle Type', fontsize=14, fontweight='bold', color=PALETTE['primary'])
+    axes[0].set_xlabel('Average Premium', fontsize=12)
+    axes[0].set_ylabel('Vehicle Type', fontsize=12)
 
     # Claim Rate by Vehicle Type
     veh_claims = df.groupby('VehicleType')['TotalClaims'].mean().reset_index()
@@ -215,7 +240,7 @@ def plot_log_claim_premium(df):
 
 
 def plot_diagnostics(df_diag, column):
-    fig, axes = plt.subplots(2, 2, figsize=(14, 10))
+    fig, axes = plt.subplots(2, 2, figsize=(14, 6))
 
     # Claim Rate
     sns.barplot(data=df_diag,x=column,y='Claim_Rate',ax=axes[0, 0])
@@ -237,7 +262,7 @@ def plot_diagnostics(df_diag, column):
     plt.show()
 
 def plot_diagnostics_row(df_diag, column):
-    fig, axes = plt.subplots(2, 2, figsize=(10, 30))
+    fig, axes = plt.subplots(2, 2, figsize=(10, 14))
 
     # Claim Rate
     sns.barplot(data=df_diag,x='Claim_Rate', y=column,ax=axes[0, 0])
@@ -342,3 +367,55 @@ def plot_log_premium_claim_severity(df):
     plt.ylabel('Total Claims')
 
     plt.show()
+
+
+def plot_box_outliers(df, column):
+    for col in column:
+        plt.figure(figsize=(8, 6))
+
+        sns.boxplot(x=df[col], color=PALETTE['highlight'])
+
+        plt.set_yscale('log')  # Set y-axis to log scale for better visibility of outliers
+
+        plt.title(f'Box Plot of {col}', fontsize=14, fontweight='bold', color=PALETTE['primary'])
+        plt.xlabel(col, fontsize=12)
+
+        plt.grid(True, which="both", ls="--", alpha=0.5)
+
+        plt.show()
+
+def plot_box_log_outliers(df, column):
+    for col in column:
+        plt.figure(figsize=(8, 6))
+
+        sns.boxplot(x=np.log1p(df[col]), color=PALETTE['highlight'])
+
+        plt.title(f'Box Plot of {col} (Log Scale)', fontsize=14, fontweight='bold', color=PALETTE['primary'])
+        plt.xlabel(col, fontsize=12)
+
+        plt.grid(True, which="both", ls="--", alpha=0.5)
+
+        plt.show()
+
+def plot_box_percentile_outliers(df):
+    plt.figure(figsize=(12,5))
+
+    sns.boxplot(
+        x=np.log1p(
+            df[df['TotalClaims'] > 0]['TotalClaims']
+        )
+    )
+
+    plt.title(
+        'Log-Scaled Claim Amount Distribution with Outliers',
+        fontsize=14,
+        fontweight='bold'
+    )
+
+    plt.xlabel('log(1 + TotalClaims)')
+
+    plt.show()
+
+
+
+ 
