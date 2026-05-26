@@ -8,4 +8,7 @@ data/
 *.db
 __pycache__/
 *.pyc 
+/config.local
+/tmp
+/cache
 /MachineLearningRating_v3.txt

@@ -4,5 +4,6 @@ stages:
     deps:
     - MachineLearningRating_v3.txt
     - src/data_preprocessor.py
+    - src/data_loader.py
     outs:
     - data/processed/cleaned_insurance_data.csv

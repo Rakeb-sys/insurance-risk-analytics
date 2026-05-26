@@ -7,6 +7,10 @@ stages:
       hash: md5
       md5: f6b7009b68ae21372b7deca9307fbb23
       size: 529363713
+    - path: src/data_loader.py
+      hash: md5
+      md5: a6db961c69b3c8fc93acd4c27ba64de9
+      size: 951
     - path: src/data_preprocessor.py
       hash: md5
       md5: 41e58b0c8bb57f7881c3e0f7363bd951
