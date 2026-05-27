@@ -7,3 +7,21 @@ stages:
     - src/data_loader.py
     outs:
     - data/processed/cleaned_insurance_data.csv
+  training_classifier:
+    cmd: python src/model_classifier.py
+    deps:
+    - data/processed/cleaned_insurance_data.csv
+    - src/data_loader.py
+    - src/data_preprocessor.py
+    - src/model_classifier.py
+    outs:
+    - models/xgb_model.json
+  training_regressor:
+    cmd: python src/model_regressor.py
+    deps:
+    - data/processed/cleaned_insurance_data.csv
+    - src/data_loader.py
+    - src/data_preprocessor.py
+    - src/model_regressor.py
+    outs:
+    - models/linear_regression_model.pkl
