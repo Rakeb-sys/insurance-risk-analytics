@@ -1,6 +1,8 @@
 import re
 
 import pandas as pd
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 def check_dateFormat(df):
     print("Checking date format:")
@@ -69,3 +71,58 @@ if __name__ == "__main__":
     save_cleaned_data(df_clean, 'insurance_data')
     
     print("🏁 Preprocessor script finished successfully!")
+
+
+def num_impute(df, df_num_cols):
+    num_imputer = SimpleImputer(strategy='median')
+    
+    # Pass the actual DataFrame slices df[df_num_cols] instead of just the list of strings
+    df[df_num_cols] = num_imputer.fit_transform(df[df_num_cols])
+    
+    return df
+
+
+def cat_impute(df, df_cat_cols):
+    # Initialize the imputer for categorical data
+    cat_imputer = SimpleImputer(strategy='most_frequent')
+
+    # Fix: Assign back to df[df_cat_cols] instead of df[df]
+    df[df_cat_cols] = cat_imputer.fit_transform(df[df_cat_cols])
+
+    return df
+
+def scaler(method, data, columns_scaler):
+
+    if method == 'standardScaler':
+
+        Standard = StandardScaler()
+        df_standard = data.copy()
+
+        # fit_transform does two things in one call:
+        # .fit()      → calculates mean and std from the data
+        # .transform() → applies (x - mean) / std to every value
+        df_standard[columns_scaler] = Standard.fit_transform(df_standard[columns_scaler])
+
+        return df_standard
+
+    elif method == 'minMaxScaler':
+
+        MinMax = MinMaxScaler()
+        df_minmax = data.copy()
+
+        # fit_transform: learns min and max from data, then applies the formula
+        df_minmax[columns_scaler] = MinMax.fit_transform(df_minmax[columns_scaler])
+
+        return df_minmax
+
+    elif method == 'npLog':
+
+        df_nplog = data.copy()
+
+        # Apply natural log to every value in the specified columns
+        df_nplog[columns_scaler] = np.log(df_nplog[columns_scaler])
+
+        return df_nplog
+
+    # Fallback: if an unrecognised method is passed, return the data unchanged
+    return data
