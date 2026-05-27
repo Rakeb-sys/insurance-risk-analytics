@@ -13,10 +13,58 @@ stages:
       size: 951
     - path: src/data_preprocessor.py
       hash: md5
-      md5: 41e58b0c8bb57f7881c3e0f7363bd951
-      size: 2454
+      md5: 3cb698014acfb7e310f267a4827956f0
+      size: 4227
     outs:
     - path: data/processed/cleaned_insurance_data.csv
       hash: md5
       md5: 381186348f3a6c0b3a6e52f1470d2e9b
       size: 494259632
+  training_classifier:
+    cmd: python src/model_classifier.py
+    deps:
+    - path: data/processed/cleaned_insurance_data.csv
+      hash: md5
+      md5: 381186348f3a6c0b3a6e52f1470d2e9b
+      size: 494259632
+    - path: src/data_loader.py
+      hash: md5
+      md5: a6db961c69b3c8fc93acd4c27ba64de9
+      size: 951
+    - path: src/data_preprocessor.py
+      hash: md5
+      md5: 3cb698014acfb7e310f267a4827956f0
+      size: 4227
+    - path: src/model_classifier.py
+      hash: md5
+      md5: df6e0e9746c08c9a5ee9553d7d6c879b
+      size: 6485
+    outs:
+    - path: models/xgb_model.json
+      hash: md5
+      md5: 7ba8d4000d608e731df3158db5a91d93
+      size: 107725
+  training_regressor:
+    cmd: python src/model_regressor.py
+    deps:
+    - path: data/processed/cleaned_insurance_data.csv
+      hash: md5
+      md5: 381186348f3a6c0b3a6e52f1470d2e9b
+      size: 494259632
+    - path: src/data_loader.py
+      hash: md5
+      md5: a6db961c69b3c8fc93acd4c27ba64de9
+      size: 951
+    - path: src/data_preprocessor.py
+      hash: md5
+      md5: 3cb698014acfb7e310f267a4827956f0
+      size: 4227
+    - path: src/model_regressor.py
+      hash: md5
+      md5: e4563af83696a8a53387d6619d4bda8b
+      size: 1886
+    outs:
+    - path: models/linear_regression_model.pkl
+      hash: md5
+      md5: c4a5d9711f62ab25843cbdebef414ad9
+      size: 16161

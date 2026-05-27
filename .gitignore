@@ -12,3 +12,5 @@ __pycache__/
 /tmp
 /cache
 /MachineLearningRating_v3.txt
+models/
+/linear_regression_model.pkl
